@@ -25,7 +25,7 @@ public class Project extends CreatorsClass<Project> {
     @Override
     public Project createFromParcel(Parcel parcel) {
       try {
-        return query().get(parcel.readString());
+        return query().fromLocalDatastore().get(parcel.readString());
       } catch (ParseException e) {
         e.printStackTrace();
       }

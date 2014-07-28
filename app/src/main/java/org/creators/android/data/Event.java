@@ -107,7 +107,7 @@ public class Event extends CreatorsClass<Event> {
     @Override
     public Event createFromParcel(Parcel parcel) {
       try {
-        return query().get(parcel.readString());
+        return query().fromLocalDatastore().get(parcel.readString());
       } catch (ParseException e) {
         e.printStackTrace();
       }

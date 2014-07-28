@@ -25,7 +25,7 @@ public class Config extends CreatorsClass<Config> {
     @Override
     public Config createFromParcel(Parcel parcel) {
       try {
-        return query().get(parcel.readString());
+        return query().fromLocalDatastore().get(parcel.readString());
       } catch (ParseException e) {
         e.printStackTrace();
       }
