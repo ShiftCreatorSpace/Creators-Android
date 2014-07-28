@@ -2,19 +2,16 @@ package org.creators.android.ui;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 
 import org.creators.android.R;
 import org.creators.android.data.User;
+import org.creators.android.ui.nav.NavItem;
 import org.creators.android.ui.nav.NavigationDrawerFragment;
 
 
@@ -58,26 +55,15 @@ public class MainActivity extends Activity
   }
 
   @Override
-  public void onNavigationDrawerItemSelected(int position) {
+  public void onNavigationDrawerItemSelected(NavItem item) {
     // update the main content by replacing fragments
     FragmentManager fragmentManager = getFragmentManager();
     fragmentManager.beginTransaction()
-      .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
+      .replace(R.id.container, item.getFragment())
       .commit();
-  }
 
-  public void onSectionAttached(int number) {
-    switch (number) {
-      case 1:
-        mTitle = getString(R.string.title_section1);
-        break;
-      case 2:
-        mTitle = getString(R.string.title_section2);
-        break;
-      case 3:
-        mTitle = getString(R.string.title_section3);
-        break;
-    }
+    mTitle = item.getTitle();
+    restoreActionBar();
   }
 
   public void restoreActionBar() {
@@ -103,54 +89,8 @@ public class MainActivity extends Activity
 
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
-    // Handle action bar item clicks here. The action bar will
-    // automatically handle clicks on the Home/Up button, so long
-    // as you specify a parent activity in AndroidManifest.xml.
     int id = item.getItemId();
-    if (id == R.id.action_settings) {
-      return true;
-    }
-    return super.onOptionsItemSelected(item);
-  }
-
-  /**
-   * A placeholder fragment containing a simple view.
-   */
-  public static class PlaceholderFragment extends Fragment {
-    /**
-     * The fragment argument representing the section number for this
-     * fragment.
-     */
-    private static final String ARG_SECTION_NUMBER = "section_number";
-
-    /**
-     * Returns a new instance of this fragment for the given section
-     * number.
-     */
-    public static PlaceholderFragment newInstance(int sectionNumber) {
-      PlaceholderFragment fragment = new PlaceholderFragment();
-      Bundle args = new Bundle();
-      args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-      fragment.setArguments(args);
-      return fragment;
-    }
-
-    public PlaceholderFragment() {
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-      View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-      return rootView;
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-      super.onAttach(activity);
-      ((MainActivity) activity).onSectionAttached(
-        getArguments().getInt(ARG_SECTION_NUMBER));
-    }
+    return id == R.id.action_settings || super.onOptionsItemSelected(item);
   }
 
 }
