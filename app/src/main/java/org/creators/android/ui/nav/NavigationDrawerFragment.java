@@ -22,6 +22,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import org.creators.android.R;
+import org.creators.android.ui.announcements.AnnouncementsFragment;
 
 import java.util.Arrays;
 import java.util.List;
@@ -58,6 +59,14 @@ public class NavigationDrawerFragment extends Fragment {
       mFromSavedInstanceState = true;
     }
 
+    List<NavItem> items = Arrays.asList(
+      // TODO: add the fragments to the drawer
+      new NavItem(getFragmentManager(), AnnouncementsFragment.class, getString(R.string.announcements), R.drawable.ic_pin),
+      new NavItem(getFragmentManager(), AnnouncementsFragment.class, "wutwut", R.drawable.ic_pin)
+    );
+
+    mAdapter = new NavItemAdapter(getActivity(), items);
+
     selectItem(mCurrentSelectedPosition);
   }
 
@@ -78,12 +87,6 @@ public class NavigationDrawerFragment extends Fragment {
         selectItem(position);
       }
     });
-
-    List<NavItem> items = Arrays.asList(
-      // TODO: add the fragments to the drawer
-    );
-
-    mAdapter = new NavItemAdapter(getActivity(), items);
 
     mDrawerListView.setAdapter(mAdapter);
     mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);

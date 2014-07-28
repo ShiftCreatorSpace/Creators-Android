@@ -24,7 +24,7 @@ public class NavItemAdapter extends ArrayAdapter<NavItem> {
 
   @Override
   public View getView(int position, View convertView, ViewGroup parent) {
-    ViewHolder holder = getHolder(getContext(), convertView);
+    ViewHolder holder = getHolder(getContext(), convertView, parent);
     NavItem item = getItem(position);
 
     holder.title.setText(item.getTitle());
@@ -33,16 +33,16 @@ public class NavItemAdapter extends ArrayAdapter<NavItem> {
     return holder.root;
   }
 
-  private static ViewHolder getHolder(Context context, View convertView) {
-    if (convertView == null) {
+  private static ViewHolder getHolder(Context context, View view, ViewGroup parent) {
+    if (view == null) {
       LayoutInflater inflater = LayoutInflater.from(context);
-      convertView = inflater.inflate(R.layout.adapter_nav_item, null);
-      convertView.setTag(new ViewHolder(
-        (LinearLayout) convertView,
-        (ImageView) convertView.findViewById(R.id.nav_item_icon),
-        (TextView) convertView.findViewById(R.id.nav_item_title)));
+      view = inflater.inflate(R.layout.adapter_nav_item, null);
+      view.setTag(new ViewHolder(
+        (LinearLayout) view,
+        (ImageView) view.findViewById(R.id.nav_item_icon),
+        (TextView) view.findViewById(R.id.nav_item_title)));
     }
-    return (ViewHolder) convertView.getTag();
+    return (ViewHolder) view.getTag();
   }
 
   private static class ViewHolder {

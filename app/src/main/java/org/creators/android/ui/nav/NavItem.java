@@ -8,24 +8,32 @@ import java.lang.reflect.InvocationTargetException;
 /**
  * Created by Damian Wieczorek <damianw@umich.edu> on 7/27/14.
  */
-public class NavItem<T extends Fragment> {
-  private FragmentManager mFragmentManager;
-  private T mFragment;
-  private Class<T> mClazz;
-  private String mTitle;
-  private int mIconId;
+public class NavItem {
+  private final FragmentManager mFragmentManager;
+  private final Class<? extends Fragment> mClazz;
+  private final String mTitle;
+  private final int mIconId;
+  private final String mTag;
 
-  public NavItem(FragmentManager fm, T fragment, Class<T> clazz, String title, int iconId) {
+  private Fragment mFragment;
+
+  public NavItem(FragmentManager fm, Class<? extends Fragment> clazz, String title, int iconId) {
     mFragmentManager = fm;
-    mFragment= fragment;
     mClazz = clazz;
     mTitle = title;
     mIconId = iconId;
+    mTag = mClazz.getSimpleName();
+    mFragment = null;
   }
 
-  public T getFragment() {
+  public NavItem(FragmentManager fm, Class<? extends Fragment> clazz, String title, int iconId, Fragment fragment) {
+    this(fm, clazz, title, iconId);
+    mFragment = fragment;
+  }
+
+  public Fragment getFragment() {
     if (mFragment == null) {
-      mFragment = (T) mFragmentManager.findFragmentByTag(mClazz.getSimpleName());
+      mFragment = mFragmentManager.findFragmentByTag(mClazz.getSimpleName());
       if (mFragment == null) {
         try {
           mFragment = mClazz.getConstructor().newInstance();
@@ -35,6 +43,10 @@ public class NavItem<T extends Fragment> {
       }
     }
     return mFragment;
+  }
+
+  public String getTag() {
+    return mTag;
   }
 
   public String getTitle() {

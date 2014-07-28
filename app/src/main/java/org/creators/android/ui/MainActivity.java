@@ -59,7 +59,7 @@ public class MainActivity extends Activity
     // update the main content by replacing fragments
     FragmentManager fragmentManager = getFragmentManager();
     fragmentManager.beginTransaction()
-      .replace(R.id.container, item.getFragment())
+      .replace(R.id.container, item.getFragment(), item.getTag())
       .commit();
 
     mTitle = item.getTitle();
