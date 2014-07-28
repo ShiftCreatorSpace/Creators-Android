@@ -1,5 +1,10 @@
 apply plugin: 'com.android.application'
 
+ext {
+  parse_application_id = ext.CREATORS_PARSE_APP_ID
+  parse_client_key = ext.CREATORS_PARSE_CLIENT_KEY
+}
+
 android {
   compileSdkVersion 20
   buildToolsVersion "20.0.0"
@@ -10,11 +15,22 @@ android {
     targetSdkVersion 20
     versionCode 1
     versionName "1.0"
+    resValue "string", "parse_application_id", parse_application_id
+    resValue "string", "parse_client_key", parse_client_key
   }
   buildTypes {
     release {
+      debuggable false
       runProguard false
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+      resValue "string", "parse_application_id", parse_application_id
+      resValue "string", "parse_client_key", parse_client_key
+    }
+    debug {
+      debuggable true
+      runProguard false
+      resValue "string", "parse_application_id", parse_application_id
+      resValue "string", "parse_client_key", parse_client_key
     }
   }
 }
