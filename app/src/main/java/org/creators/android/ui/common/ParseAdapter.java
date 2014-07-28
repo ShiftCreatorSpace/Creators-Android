@@ -1,16 +1,21 @@
 package org.creators.android.ui.common;
 
 import android.content.Context;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseQueryAdapter;
 
+import org.creators.android.data.CreatorsClass;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -18,30 +23,52 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Created by Damian Wieczorek <damianw@umich.edu> on 7/27/14.
  */
-public class ParseAdapter<T extends ParseObject> extends ArrayAdapter<T> {
+public class ParseAdapter<T extends CreatorsClass<T>> extends BaseAdapter {
+  public static final String TAG = "ParseAdapter";
+  public static final String ITEMS = "items";
+
   private final int mResId;
+  private final Context mContext;
   private final ListCallbacks<T> mCallbacks;
-  private ParseQuery<T> mQuery;
+  private final ArrayList<T> mItems = new ArrayList<>();
+  private ParseQueryAdapter.QueryFactory<T> mQueryFactory;
 
   public ParseAdapter(Context context, int resource, ListCallbacks<T> callbacks) {
-    super(context, resource);
+    mContext = context;
     mResId = resource;
     mCallbacks = callbacks;
-    mQuery = null;
+    mQueryFactory = null;
   }
 
-  public ParseAdapter(Context context, int resource, ListCallbacks<T> callbacks, ParseQuery<T> query) {
+  public ParseAdapter(Context context, int resource, ListCallbacks<T> callbacks, List<T> items) {
     this(context, resource, callbacks);
-    mQuery = query;
-    reload();
+    mItems.addAll(items);
   }
 
-  public boolean reload() {
-    if (mQuery == null) {
+  public ParseAdapter(Context context, int resource, ListCallbacks<T> callbacks, ParseQueryAdapter.QueryFactory<T> queryFactory) {
+    this(context, resource, callbacks);
+    mQueryFactory = queryFactory;
+    load();
+  }
+
+  public ParseAdapter(Context context, int resource, ListCallbacks<T> callbacks, List<T> items, ParseQueryAdapter.QueryFactory<T> queryFactory) {
+    this(context, resource, callbacks, items);
+    mQueryFactory = queryFactory;
+    load();
+  }
+
+  public boolean load() {
+    return load(true);
+  }
+
+  public boolean load(final boolean locally) {
+    if (mQueryFactory == null) {
       clear();
       return false;
     }
-    mQuery.findInBackground(new FindCallback<T>() {
+    ParseQuery<T> query = mQueryFactory.create();
+    if (locally) query.fromLocalDatastore();
+    query.findInBackground(new FindCallback<T>() {
       @Override
       public void done(List<T> ts, ParseException e) {
         if (e != null) {
@@ -51,18 +78,37 @@ public class ParseAdapter<T extends ParseObject> extends ArrayAdapter<T> {
         clear();
         addAll(ts);
         notifyDataSetChanged();
+        if (locally) load(false);
       }
     });
     return true;
   }
 
-  public boolean reload(ParseQuery<T> query) {
-    mQuery = query;
-    return reload();
+  private void add(T t) {
+    mItems.add(t);
   }
 
-  public ParseQuery<T> getQuery() {
-    return mQuery;
+  private void addAll(List<T> ts) {
+    mItems.addAll(ts);
+  }
+
+  public void merge(List<Parcelable> list) {
+    for (Parcelable parcelable : list) {
+      add((T) parcelable);
+    }
+  }
+
+  private void clear() {
+    mItems.clear();
+  }
+
+  public boolean load(ParseQueryAdapter.QueryFactory<T> queryFactory) {
+    mQueryFactory = queryFactory;
+    return load();
+  }
+
+  public ParseQueryAdapter.QueryFactory<T> getQueryFactory() {
+    return mQueryFactory;
   }
 
   public int getResId() {
@@ -70,14 +116,33 @@ public class ParseAdapter<T extends ParseObject> extends ArrayAdapter<T> {
   }
 
   @Override
+  public int getCount() {
+    return mItems.size();
+  }
+
+  @Override
+  public T getItem(int i) {
+    return mItems.get(i);
+  }
+
+  public ArrayList<T> getItems() {
+    return mItems;
+  }
+
+  @Override
+  public long getItemId(int i) {
+    return i;
+  }
+
+  @Override
   public View getView(int position, View convertView, ViewGroup parent) {
     View view = convertView;
     if (view == null) {
-      LayoutInflater inflater = LayoutInflater.from(getContext());
+      LayoutInflater inflater = LayoutInflater.from(mContext);
       view = inflater.inflate(mResId, null);
     }
 
-    mCallbacks.fillView(ViewHolder.from(view), getItem(position));
+    if (mCallbacks != null) mCallbacks.fillView(ViewHolder.from(view), getItem(position));
 
     return view;
   }

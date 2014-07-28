@@ -3,8 +3,6 @@ package org.creators.android.ui.nav;
 import android.app.Fragment;
 import android.app.FragmentManager;
 
-import java.lang.reflect.InvocationTargetException;
-
 /**
  * Created by Damian Wieczorek <damianw@umich.edu> on 7/27/14.
  */
@@ -17,32 +15,38 @@ public class NavItem {
 
   private Fragment mFragment;
 
-  public NavItem(FragmentManager fm, Class<? extends Fragment> clazz, String title, int iconId) {
+  public NavItem(FragmentManager fm, Class<? extends Fragment> clazz, String title, int iconId, String tag) {
     mFragmentManager = fm;
     mClazz = clazz;
     mTitle = title;
     mIconId = iconId;
-    mTag = mClazz.getSimpleName();
-    mFragment = null;
+    mTag = tag;
+    getFragment();
   }
 
-  public NavItem(FragmentManager fm, Class<? extends Fragment> clazz, String title, int iconId, Fragment fragment) {
-    this(fm, clazz, title, iconId);
+  public NavItem(FragmentManager fm, Class<? extends Fragment> clazz, String title, int iconId, String tag, Fragment fragment) {
+    this(fm, clazz, title, iconId, tag);
     mFragment = fragment;
   }
 
   public Fragment getFragment() {
     if (mFragment == null) {
-      mFragment = mFragmentManager.findFragmentByTag(mClazz.getSimpleName());
+      mFragment = mFragmentManager.findFragmentByTag(mTag);
       if (mFragment == null) {
         try {
           mFragment = mClazz.getConstructor().newInstance();
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+        } catch (Exception e) {
           e.printStackTrace();
         }
       }
     }
     return mFragment;
+  }
+
+  public int replace(int resId) {
+    return mFragmentManager.beginTransaction()
+      .replace(resId, getFragment(), mTag)
+      .commit();
   }
 
   public String getTag() {

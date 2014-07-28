@@ -1,6 +1,10 @@
 package org.creators.android.data;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.parse.ParseClassName;
+import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -9,9 +13,10 @@ import com.parse.ParseUser;
  * Created by Damian Wieczorek <damianw@umich.edu> on 7/26/14.
  */
 @ParseClassName(User.CLASS)
-public class User extends ParseUser {
+public class User extends ParseUser implements Parcelable {
   public static final String CLASS = "_User";
 
+  public static final String OBJECT_ID = "objectId";
   public static final String FIRST_NAME = "firstName";
   public static final String LAST_NAME = "lastName";
   public static final String USERNAME = "username";
@@ -23,7 +28,7 @@ public class User extends ParseUser {
   public static final String PHONE = "phone";
 
   public User() {
-
+    super();
   }
 
   public static User getCurrentUser() {
@@ -101,4 +106,30 @@ public class User extends ParseUser {
     return this;
   }
 
+  public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {
+    @Override
+    public User createFromParcel(Parcel parcel) {
+      try {
+        return query().get(parcel.readString());
+      } catch (ParseException e) {
+        e.printStackTrace();
+      }
+      return null;
+    }
+
+    @Override
+    public User[] newArray(int i) {
+      return new User[0];
+    }
+  };
+
+  @Override
+  public int describeContents() {
+    return 0;
+  }
+
+  @Override
+  public void writeToParcel(Parcel parcel, int i) {
+    parcel.writeString(getString(OBJECT_ID));
+  }
 }

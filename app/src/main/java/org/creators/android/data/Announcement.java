@@ -1,6 +1,9 @@
 package org.creators.android.data;
 
+import android.os.Parcel;
+
 import com.parse.ParseClassName;
+import com.parse.ParseException;
 import com.parse.ParseQuery;
 
 /**
@@ -16,7 +19,7 @@ public class Announcement extends CreatorsClass<Announcement> {
   public static final String PINNED = "pinned";
 
   public Announcement() {
-
+    super();
   }
 
   public static ParseQuery<Announcement> query() {
@@ -54,5 +57,22 @@ public class Announcement extends CreatorsClass<Announcement> {
   public Announcement setPoster(User poster) {
     return builderPut(POSTER, poster);
   }
+
+  public static final Creator<Announcement> CREATOR = new Creator<Announcement>() {
+    @Override
+    public Announcement createFromParcel(Parcel parcel) {
+      try {
+        return query().get(parcel.readString());
+      } catch (ParseException e) {
+        e.printStackTrace();
+      }
+      return null;
+    }
+
+    @Override
+    public Announcement[] newArray(int i) {
+      return new Announcement[0];
+    }
+  };
 
 }

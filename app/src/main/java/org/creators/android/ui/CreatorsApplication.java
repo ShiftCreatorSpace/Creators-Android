@@ -29,6 +29,7 @@ public class CreatorsApplication extends Application {
     ParseObject.registerSubclass(Request.class);
     ParseObject.registerSubclass(User.class);
 
+    Parse.enableLocalDatastore(this);
     Parse.initialize(this, getString(R.string.parse_application_id), getString(R.string.parse_client_key));
   }
 }

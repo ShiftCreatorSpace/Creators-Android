@@ -2,7 +2,6 @@ package org.creators.android.ui;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -20,15 +19,7 @@ public class MainActivity extends Activity
   public static final String TAG = "MainActivity";
 
   private User mUser;
-
-  /**
-   * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
-   */
   private NavigationDrawerFragment mNavigationDrawerFragment;
-
-  /**
-   * Used to store the last screen title. For use in {@link #restoreActionBar()}.
-   */
   private CharSequence mTitle;
 
   @Override
@@ -56,12 +47,7 @@ public class MainActivity extends Activity
 
   @Override
   public void onNavigationDrawerItemSelected(NavItem item) {
-    // update the main content by replacing fragments
-    FragmentManager fragmentManager = getFragmentManager();
-    fragmentManager.beginTransaction()
-      .replace(R.id.container, item.getFragment(), item.getTag())
-      .commit();
-
+    item.replace(R.id.container);
     mTitle = item.getTitle();
     restoreActionBar();
   }
@@ -77,9 +63,6 @@ public class MainActivity extends Activity
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     if (!mNavigationDrawerFragment.isDrawerOpen()) {
-      // Only show items in the action bar relevant to this screen
-      // if the drawer is not showing. Otherwise, let the drawer
-      // decide what to show in the action bar.
       getMenuInflater().inflate(R.menu.main, menu);
       restoreActionBar();
       return true;

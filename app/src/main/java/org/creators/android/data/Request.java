@@ -1,6 +1,9 @@
 package org.creators.android.data;
 
+import android.os.Parcel;
+
 import com.parse.ParseClassName;
+import com.parse.ParseException;
 import com.parse.ParseQuery;
 
 /**
@@ -15,7 +18,7 @@ public class Request extends CreatorsClass<Request> {
   public static final String REQUESTER = "requester";
 
   public Request() {
-
+    super();
   }
 
   public static ParseQuery<Request> query() {
@@ -46,4 +49,20 @@ public class Request extends CreatorsClass<Request> {
     return builderPut(REQUESTER, requester);
   }
 
+  public static final Creator<Request> CREATOR = new Creator<Request>() {
+    @Override
+    public Request createFromParcel(Parcel parcel) {
+      try {
+        return query().get(parcel.readString());
+      } catch (ParseException e) {
+        e.printStackTrace();
+      }
+      return null;
+    }
+
+    @Override
+    public Request[] newArray(int i) {
+      return new Request[0];
+    }
+  };
 }
