@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="lorem_announcement_title">Announcement Title</string>
+  <string name="lorem_event_title">Event Title</string>
+  <string name="lorem_event_time">12:30am -12:30pm</string>
+</resources>

@@ -1,8 +1,14 @@
-package org.creators.android.data;
+package org.creators.android.data.model;
+
+import android.os.Parcel;
 
 import com.parse.ParseClassName;
+import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
+
+import org.creators.android.data.DataClass;
+import org.creators.android.data.sync.Synchronize;
 
 import java.util.Date;
 import java.util.List;
@@ -11,7 +17,7 @@ import java.util.List;
  * Created by Damian Wieczorek <damianw@umich.edu> on 7/26/14.
  */
 @ParseClassName(Event.CLASS)
-public class Event extends CreatorsClass<Event> {
+public class Event extends DataClass<Event> {
   public static final String CLASS = "Event";
 
   public static final String TITLE = "title";
@@ -25,7 +31,7 @@ public class Event extends CreatorsClass<Event> {
   public static final String MAYBE_GOING = "maybeGoing";
 
   public Event() {
-
+    super();
   }
 
   public static ParseQuery<Event> query() {
@@ -98,6 +104,31 @@ public class Event extends CreatorsClass<Event> {
 
   public List<User> getMaybeGoing() {
     return getList(MAYBE_GOING);
+  }
+
+  public static final Creator<Event> CREATOR = new Creator<Event>() {
+    @Override
+    public Event createFromParcel(Parcel parcel) {
+      try {
+        return query().fromLocalDatastore().get(parcel.readString());
+      } catch (ParseException e) {
+        e.printStackTrace();
+      }
+      return null;
+    }
+
+    @Override
+    public Event[] newArray(int i) {
+      return new Event[0];
+    }
+  };
+
+  public static Synchronize<Event> getSync() {
+    return new Synchronize<>(Event.class);
+  }
+
+  public static void sync() throws Synchronize.SyncException {
+    getSync().sync();
   }
 
 }

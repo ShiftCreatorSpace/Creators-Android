@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/list_item_padding">
+
+  <ImageView
+    android:id="@+id/event_rsvp_spinner"
+    android:layout_width="24dp"
+    android:layout_height="24dp"
+
+    android:layout_alignParentTop="true"
+    android:layout_alignParentRight="true"
+
+    android:src="@drawable/ic_pin"
+    android:contentDescription="@string/rsvp"/>
+
+  <TextView
+    android:id="@+id/event_title"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+
+    android:layout_alignParentTop="true"
+    android:layout_alignParentLeft="true"
+    android:layout_toLeftOf="@id/announcement_pinned_icon"
+
+    android:textAppearance="?android:attr/textAppearanceLarge"
+    android:singleLine="true"
+    android:ellipsize="marquee"
+    android:text="@string/lorem_event_title"/>
+
+  <TextView
+    android:id="@+id/event_date"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+
+    android:layout_below="@id/event_title"
+    android:layout_marginTop="@dimen/intra_list_item_padding"
+
+    android:textAppearance="?android:textAppearanceSmall"
+    android:text="@string/lorem_date"
+    android:singleLine="true"
+    android:textStyle="bold"/>
+
+  <TextView
+    android:id="@+id/event_date_time_divider"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+
+    android:layout_toRightOf="@id/event_date"
+    android:layout_alignBottom="@id/event_date"
+    android:layout_marginLeft="@dimen/intra_list_item_padding"
+    android:layout_marginRight="@dimen/intra_list_item_padding"
+
+    android:text="@string/divider_pipe"
+    android:textAppearance="?android:textAppearanceSmall"
+    android:singleLine="true"
+    android:textStyle="bold"/>
+
+  <TextView
+    android:id="@+id/event_time"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+
+    android:layout_toRightOf="@id/event_date_time_divider"
+    android:layout_alignBottom="@id/event_date_time_divider"
+
+    android:text="@string/lorem_event_time"
+    android:textAppearance="?android:textAppearanceSmall"
+    android:singleLine="true"
+    android:textStyle="bold"/>
+
+  <TextView
+    android:id="@+id/event_details"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+
+    android:layout_below="@id/event_date"
+    android:layout_marginTop="@dimen/intra_list_item_padding"
+
+    android:singleLine="false"
+    android:maxLines="4"
+    android:ellipsize="end"
+    android:textAppearance="?android:textAppearanceMedium"
+    android:text="@string/lorem_ipsum_standard"/>
+
+</RelativeLayout>
