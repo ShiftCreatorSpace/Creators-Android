@@ -13,7 +13,8 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseQueryAdapter;
 
-import org.creators.android.data.CreatorsClass;
+import org.creators.android.data.sync.Synchronize;
+import org.creators.android.data.sync.Synchronization;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Created by Damian Wieczorek <damianw@umich.edu> on 7/27/14.
  */
-public class ParseAdapter<T extends CreatorsClass<T>> extends BaseAdapter {
+public class ParseAdapter<T extends ParseObject> extends BaseAdapter implements Synchronization.SyncCallbacks {
   public static final String TAG = "ParseAdapter";
   public static final String ITEMS = "items";
 
@@ -58,16 +59,11 @@ public class ParseAdapter<T extends CreatorsClass<T>> extends BaseAdapter {
   }
 
   public boolean load() {
-    return load(true);
-  }
-
-  public boolean load(final boolean locally) {
     if (mQueryFactory == null) {
       clear();
       return false;
     }
-    ParseQuery<T> query = mQueryFactory.create();
-    if (locally) query.fromLocalDatastore();
+    ParseQuery<T> query = mQueryFactory.create().fromLocalDatastore();
     query.findInBackground(new FindCallback<T>() {
       @Override
       public void done(List<T> ts, ParseException e) {
@@ -78,7 +74,6 @@ public class ParseAdapter<T extends CreatorsClass<T>> extends BaseAdapter {
         clear();
         addAll(ts);
         notifyDataSetChanged();
-        if (locally) load(false);
       }
     });
     return true;
@@ -145,6 +140,21 @@ public class ParseAdapter<T extends CreatorsClass<T>> extends BaseAdapter {
     if (mCallbacks != null) mCallbacks.fillView(ViewHolder.from(view), getItem(position));
 
     return view;
+  }
+
+  @Override
+  public void onSyncStarted() {
+    load();
+  }
+
+  @Override
+  public void onSyncCompleted() {
+    load();
+  }
+
+  @Override
+  public void onSyncError(Synchronize.SyncException e) {
+    load();
   }
 
   public static class ViewHolder {

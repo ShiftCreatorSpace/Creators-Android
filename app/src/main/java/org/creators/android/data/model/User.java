@@ -1,4 +1,4 @@
-package org.creators.android.data;
+package org.creators.android.data.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -8,6 +8,8 @@ import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+
+import org.creators.android.data.sync.Synchronize;
 
 /**
  * Created by Damian Wieczorek <damianw@umich.edu> on 7/26/14.
@@ -131,5 +133,13 @@ public class User extends ParseUser implements Parcelable {
   @Override
   public void writeToParcel(Parcel parcel, int i) {
     parcel.writeString(getString(OBJECT_ID));
+  }
+
+  public static Synchronize<User> getSync() {
+    return new Synchronize<>(User.class);
+  }
+
+  public static void sync() throws Synchronize.SyncException {
+    getSync().sync();
   }
 }

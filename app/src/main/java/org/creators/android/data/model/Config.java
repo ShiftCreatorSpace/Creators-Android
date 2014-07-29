@@ -1,4 +1,4 @@
-package org.creators.android.data;
+package org.creators.android.data.model;
 
 import android.os.Parcel;
 
@@ -6,11 +6,14 @@ import com.parse.ParseClassName;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 
+import org.creators.android.data.DataClass;
+import org.creators.android.data.sync.Synchronize;
+
 /**
  * Created by Damian Wieczorek <damianw@umich.edu> on 7/26/14.
  */
 @ParseClassName(Config.CLASS)
-public class Config extends CreatorsClass<Config> {
+public class Config extends DataClass<Config> {
   public static final String CLASS = "Config";
 
   public Config() {
@@ -37,4 +40,12 @@ public class Config extends CreatorsClass<Config> {
       return new Config[0];
     }
   };
+
+  public static Synchronize<Config> getSync() {
+    return new Synchronize<>(Config.class);
+  }
+
+  public static void sync() throws Synchronize.SyncException {
+    getSync().sync();
+  }
 }

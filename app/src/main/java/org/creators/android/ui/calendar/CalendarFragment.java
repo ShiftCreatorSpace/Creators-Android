@@ -2,6 +2,7 @@ package org.creators.android.ui.calendar;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,18 +14,20 @@ import com.parse.ParseQuery;
 import com.parse.ParseQueryAdapter;
 
 import org.creators.android.R;
-import org.creators.android.data.Announcement;
-import org.creators.android.data.Event;
+import org.creators.android.data.model.Announcement;
+import org.creators.android.data.model.Event;
+import org.creators.android.data.sync.Synchronization;
 import org.creators.android.ui.common.ParseAdapter;
 import org.creators.android.ui.common.Util;
 
 /**
  * Created by Damian Wieczorek <damianw@umich.edu> on 7/27/14.
  */
-public class CalendarFragment extends Fragment implements ParseAdapter.ListCallbacks<Event> {
+public class CalendarFragment extends Fragment implements ParseAdapter.ListCallbacks<Event>, SwipeRefreshLayout.OnRefreshListener {
   public static final String TAG = "CalendarFragment";
 
   private ListView mListView;
+  private SwipeRefreshLayout mLayout;
   private ParseAdapter<Event> mAdapter;
 
   public CalendarFragment() {
@@ -46,12 +49,18 @@ public class CalendarFragment extends Fragment implements ParseAdapter.ListCallb
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-    View view = inflater.inflate(R.layout.fragment_calendar, null);
+    mLayout = (SwipeRefreshLayout) inflater.inflate(R.layout.fragment_calendar, null);
 
-    mListView = (ListView) view.findViewById(R.id.events_list);
+    mListView = (ListView) mLayout.findViewById(R.id.events_list);
     mListView.setAdapter(mAdapter);
 
-    return view;
+    mLayout.setOnRefreshListener(this);
+    mLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
+      android.R.color.holo_green_light,
+      android.R.color.holo_orange_light,
+      android.R.color.holo_red_light);
+
+    return mLayout;
   }
 
   @Override
@@ -69,4 +78,10 @@ public class CalendarFragment extends Fragment implements ParseAdapter.ListCallb
     date.setText(Util.formatDate(event.getStartDate()));
     time.setText(Util.roundTimeAndFormat(event.getStartDate(), 2) + '-' + Util.roundTimeAndFormat(event.getEndDate(), 2));
   }
+
+  @Override
+  public void onRefresh() {
+    new Synchronization(mAdapter, mLayout).execute();
+  }
+
 }

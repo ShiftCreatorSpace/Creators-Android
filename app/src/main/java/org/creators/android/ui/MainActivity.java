@@ -9,7 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import org.creators.android.R;
-import org.creators.android.data.User;
+import org.creators.android.data.model.User;
 import org.creators.android.ui.nav.NavItem;
 import org.creators.android.ui.nav.NavigationDrawerFragment;
 

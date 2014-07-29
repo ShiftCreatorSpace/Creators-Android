@@ -7,7 +7,7 @@ ext {
 
 android {
   compileSdkVersion 20
-  buildToolsVersion "20.0.0"
+  buildToolsVersion '20.0.0'
 
   compileOptions {
     sourceCompatibility JavaVersion.VERSION_1_7
@@ -44,4 +44,5 @@ dependencies {
   compile fileTree(dir: 'libs', include: ['*.jar'])
   // You must install or update the Support Repository through the SDK manager to use this dependency.
   compile 'com.android.support:support-v4:20+'
+  compile 'com.google.guava:guava:16.0.+'
 }

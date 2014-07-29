@@ -1,4 +1,4 @@
-package org.creators.android.data;
+package org.creators.android.data.model;
 
 import android.os.Parcel;
 
@@ -6,11 +6,14 @@ import com.parse.ParseClassName;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 
+import org.creators.android.data.DataClass;
+import org.creators.android.data.sync.Synchronize;
+
 /**
  * Created by Damian Wieczorek <damianw@umich.edu> on 7/26/14.
  */
 @ParseClassName(Request.CLASS)
-public class Request extends CreatorsClass<Request> {
+public class Request extends DataClass<Request> {
   public static final String CLASS = "Request";
 
   public static final String TITLE = "title";
@@ -65,4 +68,12 @@ public class Request extends CreatorsClass<Request> {
       return new Request[0];
     }
   };
+
+  public static Synchronize<Request> getSync() {
+    return new Synchronize<>(Request.class);
+  }
+
+  public static void sync() throws Synchronize.SyncException {
+    getSync().sync();
+  }
 }
