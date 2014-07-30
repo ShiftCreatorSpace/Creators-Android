@@ -13,14 +13,21 @@ import org.creators.android.data.model.User;
 import org.creators.android.ui.nav.NavItem;
 import org.creators.android.ui.nav.NavigationDrawerFragment;
 
+import java.util.Date;
+
 
 public class MainActivity extends Activity
   implements NavigationDrawerFragment.NavigationDrawerCallbacks {
   public static final String TAG = "MainActivity";
 
+  public static final String SHOULD_SYNC = "sync";
+  public static final String TIME_SAVED = "time_saved";
+
   private User mUser;
   private NavigationDrawerFragment mNavigationDrawerFragment;
   private CharSequence mTitle;
+
+  private boolean mShouldSync = true;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -46,10 +53,19 @@ public class MainActivity extends Activity
   }
 
   @Override
+  protected void onRestoreInstanceState(Bundle savedInstanceState) {
+    super.onRestoreInstanceState(savedInstanceState);
+    mShouldSync = savedInstanceState.getBoolean(SHOULD_SYNC, false);
+  }
+
+  @Override
   public void onNavigationDrawerItemSelected(NavItem item) {
-    item.replace(R.id.container);
+    Bundle args = new Bundle();
+    args.putBoolean(SHOULD_SYNC, mShouldSync);
+    item.replace(R.id.container, args);
     mTitle = item.getTitle();
     restoreActionBar();
+    mShouldSync = false;
   }
 
   public void restoreActionBar() {
@@ -59,6 +75,12 @@ public class MainActivity extends Activity
     actionBar.setTitle(mTitle);
   }
 
+  @Override
+  protected void onSaveInstanceState(Bundle outState) {
+    super.onSaveInstanceState(outState);
+    outState.putBoolean(SHOULD_SYNC, mShouldSync);
+    outState.putLong(TIME_SAVED, new Date().getTime());
+  }
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {

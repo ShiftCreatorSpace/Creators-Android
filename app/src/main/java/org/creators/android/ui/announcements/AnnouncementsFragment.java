@@ -15,6 +15,7 @@ import com.parse.ParseQueryAdapter;
 
 import org.creators.android.R;
 import org.creators.android.data.model.Announcement;
+import org.creators.android.ui.MainActivity;
 import org.creators.android.ui.common.ParseAdapter;
 
 /**
@@ -52,14 +53,9 @@ public class AnnouncementsFragment extends Fragment implements ParseAdapter.List
     mListView.setAdapter(mAdapter);
 
     mAdapter.bindSync(mLayout);
+    if (getArguments().getBoolean(MainActivity.SHOULD_SYNC, false)) mAdapter.onRefresh();
 
     return mLayout;
-  }
-
-  @Override
-  public void onViewCreated(View view, Bundle savedInstanceState) {
-    super.onViewCreated(view, savedInstanceState);
-    mAdapter.onRefresh();
   }
 
   @Override

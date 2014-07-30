@@ -12,8 +12,6 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import org.creators.android.data.sync.Synchronize;
-import org.creators.android.ui.common.AsyncFunction;
-import org.creators.android.ui.common.Util;
 
 /**
  * Created by Damian Wieczorek <damianw@umich.edu> on 7/26/14.
@@ -32,6 +30,7 @@ public class User extends ParseUser implements Parcelable {
   public static final String MAJOR = "major";
   public static final String SELFIE = "selfie";
   public static final String PHONE = "phone";
+  public static final String SEX = "sex";
 
   public User() {
     super();
@@ -107,10 +106,6 @@ public class User extends ParseUser implements Parcelable {
     return BitmapFactory.decodeByteArray(data, 0, data.length);
   }
 
-  public void getSelfieInBackground(AsyncFunction.FunctionCallback<Bitmap> callbacks) {
-    AsyncFunction.from(Util.Func.PFILE_TO_BITMAP).apply(getSelfieFile(), callbacks);
-  }
-
   public User setSelfie(ParseFile selfie) {
     put(SELFIE, selfie);
     return this;
@@ -123,6 +118,17 @@ public class User extends ParseUser implements Parcelable {
   public User setPhone(String phone) {
     put(PHONE, phone);
     return this;
+  }
+
+  public Sex getSex() {
+    return getString(SEX).equals(Sex.FEMALE) ? Sex.F : Sex.M;
+  }
+
+  public enum Sex {
+    M, F;
+
+    private static final String MALE = "male";
+    private static final String FEMALE = "female";
   }
 
   public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {

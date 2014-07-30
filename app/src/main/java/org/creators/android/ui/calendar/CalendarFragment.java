@@ -15,6 +15,7 @@ import com.parse.ParseQueryAdapter;
 
 import org.creators.android.R;
 import org.creators.android.data.model.Event;
+import org.creators.android.ui.MainActivity;
 import org.creators.android.ui.common.ParseAdapter;
 import org.creators.android.ui.common.Util;
 
@@ -53,6 +54,7 @@ public class CalendarFragment extends Fragment implements ParseAdapter.ListCallb
     mListView.setAdapter(mAdapter);
 
     mAdapter.bindSync(mLayout);
+    if (getArguments().getBoolean(MainActivity.SHOULD_SYNC, false)) mAdapter.onRefresh();
 
     return mLayout;
   }

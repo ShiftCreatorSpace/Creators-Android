@@ -37,7 +37,7 @@ public class Synchronize<T extends ParseObject> {
       MapDifference<String, T> difference = Maps.difference(remoteObjects, localObjects, DataClass.equivalentOn(DataClass.OBJECT_ID));
 
       // Pin all the new remote objects
-      for (T object : difference.entriesOnlyOnLeft().values()) {
+      for (T object : remoteObjects.values()) {
         object.pin();
       }
 

@@ -2,6 +2,7 @@ package org.creators.android.ui.nav;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.os.Bundle;
 
 /**
  * Created by Damian Wieczorek <damianw@umich.edu> on 7/27/14.
@@ -43,9 +44,11 @@ public class NavItem {
     return mFragment;
   }
 
-  public int replace(int resId) {
+  public int replace(int resId, Bundle args) {
+    Fragment fragment = getFragment();
+    if (!fragment.isAdded()) fragment.setArguments(args);
     return mFragmentManager.beginTransaction()
-      .replace(resId, getFragment(), mTag)
+      .replace(resId, fragment, mTag)
       .commit();
   }
 

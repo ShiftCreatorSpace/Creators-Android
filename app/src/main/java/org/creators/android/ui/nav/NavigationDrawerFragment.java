@@ -19,7 +19,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import org.creators.android.R;
 import org.creators.android.ui.announcements.AnnouncementsFragment;
@@ -62,10 +61,9 @@ public class NavigationDrawerFragment extends Fragment {
     }
 
     List<NavItem> items = Arrays.asList(
-      // TODO: add the fragments to the drawer
-      new NavItem(getFragmentManager(), AnnouncementsFragment.class, getString(R.string.announcements), R.drawable.ic_pin, AnnouncementsFragment.TAG),
-      new NavItem(getFragmentManager(), CalendarFragment.class, getString(R.string.events), R.drawable.ic_pin, CalendarFragment.TAG),
-      new NavItem(getFragmentManager(), MembersFragment.class, getString(R.string.members), R.drawable.ic_pin, MembersFragment.TAG)
+      new NavItem(getFragmentManager(), AnnouncementsFragment.class, getString(R.string.announcements), R.drawable.ic_newspaper, AnnouncementsFragment.TAG),
+      new NavItem(getFragmentManager(), CalendarFragment.class, getString(R.string.events), R.drawable.ic_calendar, CalendarFragment.TAG),
+      new NavItem(getFragmentManager(), MembersFragment.class, getString(R.string.members), R.drawable.ic_member, MembersFragment.TAG)
     );
 
     mAdapter = new NavItemAdapter(getActivity(), items);
@@ -215,16 +213,8 @@ public class NavigationDrawerFragment extends Fragment {
 
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
-    if (mDrawerToggle.onOptionsItemSelected(item)) {
-      return true;
-    }
+    return mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
 
-    if (item.getItemId() == R.id.action_example) {
-      Toast.makeText(getActivity(), "Example action.", Toast.LENGTH_SHORT).show();
-      return true;
-    }
-
-    return super.onOptionsItemSelected(item);
   }
 
   public NavItem getItem(int position) {

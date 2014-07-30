@@ -12,9 +12,12 @@ import android.widget.TextView;
 
 import com.parse.ParseQuery;
 import com.parse.ParseQueryAdapter;
+import com.squareup.picasso.Picasso;
 
 import org.creators.android.R;
 import org.creators.android.data.model.User;
+import org.creators.android.ui.MainActivity;
+import org.creators.android.ui.common.CircleTransform;
 import org.creators.android.ui.common.ParseAdapter;
 
 /**
@@ -52,6 +55,7 @@ public class MembersFragment extends Fragment implements ParseAdapter.ListCallba
     mListView.setAdapter(mAdapter);
 
     mAdapter.bindSync(mLayout);
+    if (getArguments().getBoolean(MainActivity.SHOULD_SYNC, false)) mAdapter.onRefresh();
 
     return mLayout;
   }
@@ -62,6 +66,11 @@ public class MembersFragment extends Fragment implements ParseAdapter.ListCallba
     TextView fullName = holder.get(R.id.user_full_name);
 
     fullName.setText(user.getFullName());
+    Picasso.with(getActivity())
+      .load(user.getSelfieFile().getUrl())
+      .transform(new CircleTransform())
+      .placeholder(user.getSex() == User.Sex.M ? R.drawable.ic_member_male : R.drawable.ic_member_female)
+      .into(selfie);
   }
 
 }
