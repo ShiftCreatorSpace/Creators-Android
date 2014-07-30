@@ -44,28 +44,57 @@ public abstract class DataClass<T extends DataClass<T>> extends ParseObject impl
     parcel.writeString(getString(OBJECT_ID));
   }
 
-  public static final Function<ParseObject, String> GET_ID = new Function<ParseObject, String>() {
-    @Override
-    public String apply(ParseObject input) {
-      return input.getObjectId();
-    }
-  };
-
   public static <T extends ParseObject, V> Function<T, V> getter(final String key) {
-    return new Function<T, V>() {
-      @Override
-      public V apply(T input) {
-        return (V) input.get(key);
-      }
-    };
+    switch (key) {
+      case OBJECT_ID:
+        return new Function<T, V>() {
+          @Override
+          public V apply(ParseObject input) {
+            return (V) input.getObjectId();
+          }
+        };
+
+      case CREATED_AT:
+        return new Function<T, V>() {
+          @Override
+          public V apply(T input) {
+            return (V) input.getCreatedAt();
+          }
+        };
+
+      case UPDATED_AT:
+        return new Function<T, V>() {
+          @Override
+          public V apply(T input) {
+            return (V) input.getUpdatedAt();
+          }
+        };
+
+      case ACL:
+        return new Function<T, V>() {
+          @Override
+          public V apply(T input) {
+            return (V) input.getACL();
+          }
+        };
+
+      default:
+        return new Function<T, V>() {
+          @Override
+          public V apply(T input) {
+            return (V) input.get(key);
+          }
+        };
+    }
   }
 
   public static <T extends ParseObject> Equivalence<T> equivalentOn(String key) {
-    return (Equivalence<T>) Equivalence.equals().onResultOf(GET_ID);
+    return (Equivalence<T>) Equivalence.equals().onResultOf(getter(key));
   }
 
   public static <T extends ParseObject> ImmutableMap<String, T> mapping(Iterable<T> objects) {
-    return Maps.uniqueIndex(objects, GET_ID);
+    Function<T, String> keyFunction = getter(OBJECT_ID);
+    return Maps.uniqueIndex(objects, keyFunction);
   }
 
 }
