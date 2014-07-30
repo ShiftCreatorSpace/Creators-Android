@@ -5,6 +5,7 @@ import android.os.Parcel;
 import com.parse.ParseClassName;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.ParseQueryAdapter;
 
 import org.creators.android.data.DataClass;
 import org.creators.android.data.sync.Synchronize;
@@ -22,7 +23,7 @@ public class Announcement extends DataClass<Announcement> {
   public static final String PINNED = "pinned";
 
   public Announcement() {
-    super();
+    super(false);
   }
 
   public static ParseQuery<Announcement> query() {
@@ -83,7 +84,12 @@ public class Announcement extends DataClass<Announcement> {
   };
 
   public static Synchronize<Announcement> getSync() {
-    return new Synchronize<>(Announcement.class);
+    return new Synchronize<>(new ParseQueryAdapter.QueryFactory<Announcement>() {
+      @Override
+      public ParseQuery<Announcement> create() {
+        return remoteQuery();
+      }
+    });
   }
 
 }

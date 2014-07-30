@@ -6,12 +6,12 @@ import com.parse.ParseClassName;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
+import com.parse.ParseQueryAdapter;
 
 import org.creators.android.data.DataClass;
 import org.creators.android.data.sync.Synchronize;
 
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by Damian Wieczorek <damianw@umich.edu> on 7/26/14.
@@ -26,12 +26,9 @@ public class Event extends DataClass<Event> {
   public static final String END_DATE = "endDate";
   public static final String LOCATION = "location";
   public static final String LOCATION_NAME = "locationName";
-  public static final String GOING = "going";
-  public static final String NOT_GOING = "notGoing";
-  public static final String MAYBE_GOING = "maybeGoing";
 
   public Event() {
-    super();
+    super(false);
   }
 
   public static ParseQuery<Event> query() {
@@ -90,17 +87,7 @@ public class Event extends DataClass<Event> {
     return builderPut(LOCATION_NAME, locationName);
   }
 
-  public List<User> getGoing() {
-    return getList(GOING);
-  }
 
-  public List<User> getNotGoing() {
-    return getList(NOT_GOING);
-  }
-
-  public List<User> getMaybeGoing() {
-    return getList(MAYBE_GOING);
-  }
 
   public static final Creator<Event> CREATOR = new Creator<Event>() {
     @Override
@@ -120,7 +107,12 @@ public class Event extends DataClass<Event> {
   };
 
   public static Synchronize<Event> getSync() {
-    return new Synchronize<>(Event.class);
+    return new Synchronize<>(new ParseQueryAdapter.QueryFactory<Event>() {
+      @Override
+      public ParseQuery<Event> create() {
+        return remoteQuery();
+      }
+    });
   }
 
 }

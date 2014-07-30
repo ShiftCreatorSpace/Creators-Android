@@ -5,15 +5,15 @@
                 android:layout_height="wrap_content"
                 android:padding="@dimen/list_item_padding">
 
-  <ImageView
+  <Spinner
     android:id="@+id/event_rsvp_spinner"
-    android:layout_width="24dp"
-    android:layout_height="24dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
 
     android:layout_alignParentTop="true"
     android:layout_alignParentRight="true"
+    android:gravity="right"
 
-    android:src="@drawable/ic_pin"
     android:contentDescription="@string/rsvp"/>
 
   <TextView

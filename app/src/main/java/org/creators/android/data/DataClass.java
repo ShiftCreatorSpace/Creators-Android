@@ -21,12 +21,15 @@ public abstract class DataClass<T extends DataClass<T>> extends ParseObject impl
   public static final String UPDATED_AT = "updatedAt";
   public static final String ACL = "ACL";
 
-  public DataClass() {
-
+  public DataClass(boolean userCreated) {
+    if (userCreated) {
+      pinInBackground(null);
+    }
   }
 
   public T builderPut(String key, Object value) {
     put(key, value);
+    saveEventually();
     return (T) this;
   }
 
