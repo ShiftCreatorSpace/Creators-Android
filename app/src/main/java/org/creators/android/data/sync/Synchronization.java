@@ -45,12 +45,12 @@ public class Synchronization extends AsyncTask<Void, Void, Void> {
     if (mLayout.isPresent()) mLayout.get().setRefreshing(true);
 
     try {
-      Announcement.sync();
-      Config.sync();
-      Event.sync();
-      Project.sync();
-      Request.sync();
-      User.sync();
+      Announcement.getSync().sync();
+      Config.getSync().sync();
+      Event.getSync().sync();
+      Project.getSync().sync();
+      Request.getSync().sync();
+      User.getSync().sync();
     } catch (Synchronize.SyncException e) {
       return error(e);
     }

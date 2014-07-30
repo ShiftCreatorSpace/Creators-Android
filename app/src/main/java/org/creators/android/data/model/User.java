@@ -1,5 +1,7 @@
 package org.creators.android.data.model;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -10,6 +12,8 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import org.creators.android.data.sync.Synchronize;
+import org.creators.android.ui.common.AsyncFunction;
+import org.creators.android.ui.common.Util;
 
 /**
  * Created by Damian Wieczorek <damianw@umich.edu> on 7/26/14.
@@ -38,6 +42,10 @@ public class User extends ParseUser implements Parcelable {
   }
 
   public static ParseQuery<User> query() {
+    return ParseQuery.getQuery(User.class).fromLocalDatastore();
+  }
+
+  public static ParseQuery<User> remoteQuery() {
     return ParseQuery.getQuery(User.class);
   }
 
@@ -90,8 +98,17 @@ public class User extends ParseUser implements Parcelable {
     return this;
   }
 
-  public ParseFile getSelfie() {
+  public ParseFile getSelfieFile() {
     return getParseFile(SELFIE);
+  }
+
+  public Bitmap getSelfie() throws ParseException {
+    byte[] data = getSelfieFile().getData();
+    return BitmapFactory.decodeByteArray(data, 0, data.length);
+  }
+
+  public void getSelfieInBackground(AsyncFunction.FunctionCallback<Bitmap> callbacks) {
+    AsyncFunction.from(Util.Func.PFILE_TO_BITMAP).apply(getSelfieFile(), callbacks);
   }
 
   public User setSelfie(ParseFile selfie) {
@@ -139,7 +156,4 @@ public class User extends ParseUser implements Parcelable {
     return new Synchronize<>(User.class);
   }
 
-  public static void sync() throws Synchronize.SyncException {
-    getSync().sync();
-  }
 }

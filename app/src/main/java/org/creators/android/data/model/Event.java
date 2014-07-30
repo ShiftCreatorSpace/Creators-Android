@@ -35,15 +35,11 @@ public class Event extends DataClass<Event> {
   }
 
   public static ParseQuery<Event> query() {
-    return ParseQuery.getQuery(Event.class);
+    return ParseQuery.getQuery(Event.class).fromLocalDatastore();
   }
 
-  public static ParseQuery<Event> queryWithAttendance() {
-    ParseQuery<Event> result = query();
-    result.include(GOING);
-    result.include(NOT_GOING);
-    result.include(MAYBE_GOING);
-    return result;
+  public static ParseQuery<Event> remoteQuery() {
+    return ParseQuery.getQuery(Event.class);
   }
 
   public String getTitle() {
@@ -125,10 +121,6 @@ public class Event extends DataClass<Event> {
 
   public static Synchronize<Event> getSync() {
     return new Synchronize<>(Event.class);
-  }
-
-  public static void sync() throws Synchronize.SyncException {
-    getSync().sync();
   }
 
 }

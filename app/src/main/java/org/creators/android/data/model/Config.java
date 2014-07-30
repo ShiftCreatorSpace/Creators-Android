@@ -21,6 +21,10 @@ public class Config extends DataClass<Config> {
   }
 
   public static ParseQuery<Config> query() {
+    return ParseQuery.getQuery(Config.class).fromLocalDatastore();
+  }
+
+  public static ParseQuery<Config> remoteQuery() {
     return ParseQuery.getQuery(Config.class);
   }
 
@@ -45,7 +49,4 @@ public class Config extends DataClass<Config> {
     return new Synchronize<>(Config.class);
   }
 
-  public static void sync() throws Synchronize.SyncException {
-    getSync().sync();
-  }
 }

@@ -14,16 +14,14 @@ import com.parse.ParseQuery;
 import com.parse.ParseQueryAdapter;
 
 import org.creators.android.R;
-import org.creators.android.data.model.Announcement;
 import org.creators.android.data.model.Event;
-import org.creators.android.data.sync.Synchronization;
 import org.creators.android.ui.common.ParseAdapter;
 import org.creators.android.ui.common.Util;
 
 /**
  * Created by Damian Wieczorek <damianw@umich.edu> on 7/27/14.
  */
-public class CalendarFragment extends Fragment implements ParseAdapter.ListCallbacks<Event>, SwipeRefreshLayout.OnRefreshListener {
+public class CalendarFragment extends Fragment implements ParseAdapter.ListCallbacks<Event> {
   public static final String TAG = "CalendarFragment";
 
   private ListView mListView;
@@ -41,7 +39,7 @@ public class CalendarFragment extends Fragment implements ParseAdapter.ListCallb
     ParseQueryAdapter.QueryFactory<Event> factory = new ParseQueryAdapter.QueryFactory<Event>() {
       @Override
       public ParseQuery<Event> create() {
-        return Event.query().orderByDescending(Announcement.CREATED_AT);
+        return Event.query().orderByDescending(Event.CREATED_AT);
       }
     };
     mAdapter = new ParseAdapter<>(getActivity(), R.layout.adapter_event, this, factory);
@@ -54,11 +52,7 @@ public class CalendarFragment extends Fragment implements ParseAdapter.ListCallb
     mListView = (ListView) mLayout.findViewById(R.id.events_list);
     mListView.setAdapter(mAdapter);
 
-    mLayout.setOnRefreshListener(this);
-    mLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
-      android.R.color.holo_green_light,
-      android.R.color.holo_orange_light,
-      android.R.color.holo_red_light);
+    mAdapter.bindSync(mLayout);
 
     return mLayout;
   }
@@ -75,13 +69,8 @@ public class CalendarFragment extends Fragment implements ParseAdapter.ListCallb
 
     title.setText(event.getTitle());
     details.setText(event.getDetails());
-    date.setText(Util.formatDate(event.getStartDate()));
-    time.setText(Util.roundTimeAndFormat(event.getStartDate(), 2) + '-' + Util.roundTimeAndFormat(event.getEndDate(), 2));
-  }
-
-  @Override
-  public void onRefresh() {
-    new Synchronization(mAdapter, mLayout).execute();
+    date.setText(Util.Format.formatDate(event.getStartDate()));
+    time.setText(Util.Format.roundTimeAndFormat(event.getStartDate(), 2) + '-' + Util.Format.roundTimeAndFormat(event.getEndDate(), 2));
   }
 
 }

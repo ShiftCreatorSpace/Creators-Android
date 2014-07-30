@@ -25,6 +25,10 @@ public class Request extends DataClass<Request> {
   }
 
   public static ParseQuery<Request> query() {
+    return ParseQuery.getQuery(Request.class).fromLocalDatastore();
+  }
+
+  public static ParseQuery<Request> remoteQuery() {
     return ParseQuery.getQuery(Request.class);
   }
 
@@ -73,7 +77,4 @@ public class Request extends DataClass<Request> {
     return new Synchronize<>(Request.class);
   }
 
-  public static void sync() throws Synchronize.SyncException {
-    getSync().sync();
-  }
 }

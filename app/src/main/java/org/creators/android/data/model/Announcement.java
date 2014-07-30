@@ -26,6 +26,10 @@ public class Announcement extends DataClass<Announcement> {
   }
 
   public static ParseQuery<Announcement> query() {
+    return ParseQuery.getQuery(Announcement.class).fromLocalDatastore();
+  }
+
+  public static ParseQuery<Announcement> remoteQuery() {
     return ParseQuery.getQuery(Announcement.class);
   }
 
@@ -80,10 +84,6 @@ public class Announcement extends DataClass<Announcement> {
 
   public static Synchronize<Announcement> getSync() {
     return new Synchronize<>(Announcement.class);
-  }
-
-  public static void sync() throws Synchronize.SyncException {
-    getSync().sync();
   }
 
 }

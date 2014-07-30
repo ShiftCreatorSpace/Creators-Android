@@ -21,6 +21,10 @@ public class Project extends DataClass<Project> {
   }
 
   public static ParseQuery<Project> query() {
+    return ParseQuery.getQuery(Project.class).fromLocalDatastore();
+  }
+
+  public static ParseQuery<Project> remoteQuery() {
     return ParseQuery.getQuery(Project.class);
   }
 
@@ -45,7 +49,4 @@ public class Project extends DataClass<Project> {
     return new Synchronize<>(Project.class);
   }
 
-  public static void sync() throws Synchronize.SyncException {
-    getSync().sync();
-  }
 }

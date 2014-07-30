@@ -15,13 +15,12 @@ import com.parse.ParseQueryAdapter;
 
 import org.creators.android.R;
 import org.creators.android.data.model.Announcement;
-import org.creators.android.data.sync.Synchronization;
 import org.creators.android.ui.common.ParseAdapter;
 
 /**
  * Created by Damian Wieczorek <damianw@umich.edu> on 7/27/14.
  */
-public class AnnouncementsFragment extends Fragment implements ParseAdapter.ListCallbacks<Announcement>, SwipeRefreshLayout.OnRefreshListener {
+public class AnnouncementsFragment extends Fragment implements ParseAdapter.ListCallbacks<Announcement> {
   public static final String TAG = "AnnouncementsFragment";
 
   private ListView mListView;
@@ -52,11 +51,7 @@ public class AnnouncementsFragment extends Fragment implements ParseAdapter.List
     mListView = (ListView) mLayout.findViewById(R.id.announcements_list);
     mListView.setAdapter(mAdapter);
 
-    mLayout.setOnRefreshListener(this);
-    mLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
-      android.R.color.holo_green_light,
-      android.R.color.holo_orange_light,
-      android.R.color.holo_red_light);
+    mAdapter.bindSync(mLayout);
 
     return mLayout;
   }
@@ -64,7 +59,7 @@ public class AnnouncementsFragment extends Fragment implements ParseAdapter.List
   @Override
   public void onViewCreated(View view, Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
-    onRefresh();
+    mAdapter.onRefresh();
   }
 
   @Override
@@ -83,11 +78,6 @@ public class AnnouncementsFragment extends Fragment implements ParseAdapter.List
     title.setText(announcement.getTitle());
     details.setText(announcement.getDetails());
     pinned.setVisibility(announcement.isPinned() ? View.VISIBLE : View.GONE);
-  }
-
-  @Override
-  public void onRefresh() {
-    new Synchronization(mAdapter, mLayout).execute();
   }
 
 }
