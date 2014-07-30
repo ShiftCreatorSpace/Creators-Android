@@ -59,10 +59,10 @@ public class CalendarFragment extends Fragment implements ParseAdapter.ListCallb
 
   @Override
   public void fillView(ParseAdapter.ViewHolder holder, Event event) {
-    TextView title = (TextView) holder.get(R.id.event_title);
-    TextView details = (TextView) holder.get(R.id.event_details);
-    TextView date = (TextView) holder.get(R.id.event_date);
-    TextView time = (TextView) holder.get(R.id.event_time);
+    TextView title = holder.get(R.id.event_title);
+    TextView details = holder.get(R.id.event_details);
+    TextView date = holder.get(R.id.event_date);
+    TextView time = holder.get(R.id.event_time);
     // TODO: actually make this a spinner. right now it's just a placeholder
     ImageView pinned = (ImageView) holder.get(R.id.event_rsvp_spinner);
 

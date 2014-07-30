@@ -3,4 +3,5 @@
   <string name="lorem_announcement_title">Announcement Title</string>
   <string name="lorem_event_title">Event Title</string>
   <string name="lorem_event_time">12:30am -12:30pm</string>
+  <string name="lorem_user_full_name">Marvin Gaye</string>
 </resources>

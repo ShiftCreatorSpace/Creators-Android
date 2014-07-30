@@ -173,11 +173,11 @@ public class ParseAdapter<T extends ParseObject> extends BaseAdapter implements 
       return holder;
     }
 
-    public View get(int id) {
+    public <T extends View> T get(int id) {
       if (!mMap.containsKey(id)) {
         mMap.put(id, root.findViewById(id));
       }
-      return mMap.get(id);
+      return (T) mMap.get(id);
     }
   }
 

@@ -25,5 +25,6 @@
   <string name="lorem_date">Wednesday, September 31</string>
   <string name="divider_pipe">|</string>
   <string name="events">Events</string>
+  <string name="members">Members</string>
 
 </resources>
