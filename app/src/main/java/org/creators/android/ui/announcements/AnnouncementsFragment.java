@@ -71,9 +71,9 @@ public class AnnouncementsFragment extends Fragment implements ParseAdapter.List
 
   @Override
   public void fillView(ParseAdapter.ViewHolder holder, Announcement announcement) {
-    TextView title = (TextView) holder.get(R.id.announcement_title);
-    TextView details = (TextView) holder.get(R.id.announcement_details);
-    ImageView pinned = (ImageView) holder.get(R.id.announcement_pinned_icon);
+    TextView title = holder.get(R.id.announcement_title);
+    TextView details = holder.get(R.id.announcement_details);
+    ImageView pinned = holder.get(R.id.announcement_pinned_icon);
 
     title.setText(announcement.getTitle());
     details.setText(announcement.getDetails());
