@@ -9,6 +9,7 @@ import com.parse.ParseClassName;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseQuery;
+import com.parse.ParseQueryAdapter;
 import com.parse.ParseUser;
 
 import org.creators.android.data.sync.Synchronize;
@@ -159,7 +160,12 @@ public class User extends ParseUser implements Parcelable {
   }
 
   public static Synchronize<User> getSync() {
-    return new Synchronize<>(User.class);
+    return new Synchronize<>(new ParseQueryAdapter.QueryFactory<User>() {
+      @Override
+      public ParseQuery<User> create() {
+        return remoteQuery();
+      }
+    });
   }
 
 }

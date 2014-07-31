@@ -4,11 +4,10 @@ import com.google.common.collect.MapDifference;
 import com.google.common.collect.Maps;
 import com.parse.ParseException;
 import com.parse.ParseObject;
-import com.parse.ParseQuery;
+import com.parse.ParseQueryAdapter;
 
 import org.creators.android.data.DataClass;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -19,10 +18,10 @@ public class Synchronize<T extends ParseObject> {
   private static final int SYNC_TIMEOUT = 1;
   private static final TimeUnit SYNC_TIMEOUT_UNIT = TimeUnit.MINUTES;
 
-  private Class<T> mClazz;
+  private ParseQueryAdapter.QueryFactory<T> mQueryFactory;
 
-  public Synchronize(Class<T> clazz) {
-    mClazz = clazz;
+  public Synchronize(ParseQueryAdapter.QueryFactory<T> queryFactory) {
+    mQueryFactory = queryFactory;
   }
 
   public void sync() throws SyncException {
@@ -54,21 +53,12 @@ public class Synchronize<T extends ParseObject> {
 
   }
 
-  private Map<String, T> getLocalObjects() {
-    try {
-      return DataClass.mapping(query().fromLocalDatastore().find());
-    } catch (ParseException e) {
-      e.printStackTrace();
-    }
-    return new HashMap<>();
+  private Map<String, T> getLocalObjects() throws ParseException {
+    return DataClass.mapping(mQueryFactory.create().fromLocalDatastore().find());
   }
 
   private Map<String, T> getRemoteObjects() throws ParseException {
-    return DataClass.mapping(query().find());
-  }
-
-  private ParseQuery<T> query() {
-    return ParseQuery.getQuery(mClazz);
+    return DataClass.mapping(mQueryFactory.create().find());
   }
 
   public static class SyncException extends Exception {

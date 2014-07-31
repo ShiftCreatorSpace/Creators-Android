@@ -5,6 +5,7 @@ import android.os.Parcel;
 import com.parse.ParseClassName;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.ParseQueryAdapter;
 
 import org.creators.android.data.DataClass;
 import org.creators.android.data.sync.Synchronize;
@@ -17,7 +18,7 @@ public class Config extends DataClass<Config> {
   public static final String CLASS = "Config";
 
   public Config() {
-    super();
+    super(false);
   }
 
   public static ParseQuery<Config> query() {
@@ -46,7 +47,12 @@ public class Config extends DataClass<Config> {
   };
 
   public static Synchronize<Config> getSync() {
-    return new Synchronize<>(Config.class);
+    return new Synchronize<>(new ParseQueryAdapter.QueryFactory<Config>() {
+      @Override
+      public ParseQuery<Config> create() {
+        return remoteQuery();
+      }
+    });
   }
 
 }

@@ -9,6 +9,7 @@ import org.creators.android.R;
 import org.creators.android.data.model.Announcement;
 import org.creators.android.data.model.Config;
 import org.creators.android.data.model.Event;
+import org.creators.android.data.model.EventResponse;
 import org.creators.android.data.model.Project;
 import org.creators.android.data.model.Request;
 import org.creators.android.data.model.User;
@@ -25,6 +26,7 @@ public class CreatorsApplication extends Application {
     ParseObject.registerSubclass(Announcement.class);
     ParseObject.registerSubclass(Config.class);
     ParseObject.registerSubclass(Event.class);
+    ParseObject.registerSubclass(EventResponse.class);
     ParseObject.registerSubclass(Project.class);
     ParseObject.registerSubclass(Request.class);
     ParseObject.registerSubclass(User.class);

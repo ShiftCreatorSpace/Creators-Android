@@ -8,6 +8,7 @@ import com.google.common.base.Optional;
 import org.creators.android.data.model.Announcement;
 import org.creators.android.data.model.Config;
 import org.creators.android.data.model.Event;
+import org.creators.android.data.model.EventResponse;
 import org.creators.android.data.model.Project;
 import org.creators.android.data.model.Request;
 import org.creators.android.data.model.User;
@@ -48,6 +49,7 @@ public class Synchronization extends AsyncTask<Void, Void, Void> {
       Announcement.getSync().sync();
       Config.getSync().sync();
       Event.getSync().sync();
+      EventResponse.getSync().sync();
       Project.getSync().sync();
       Request.getSync().sync();
       User.getSync().sync();
