@@ -8,6 +8,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.parse.ParseObject;
+import com.parse.SaveCallback;
 
 import org.creators.android.data.model.User;
 
@@ -27,14 +28,20 @@ public abstract class DataClass<T extends DataClass<T>> extends ParseObject impl
     }
   }
 
+  @SuppressWarnings("unchecked")
   public T builderPut(String key, Object value) {
     put(key, value);
-    saveEventually();
     return (T) this;
   }
 
   public User getUser(String key) {
     return (User) getParseUser(key);
+  }
+
+  @Override
+  public void saveEventually(SaveCallback callback) {
+    pinInBackground(null);
+    super.saveEventually(callback);
   }
 
   @Override
@@ -47,6 +54,7 @@ public abstract class DataClass<T extends DataClass<T>> extends ParseObject impl
     parcel.writeString(getString(OBJECT_ID));
   }
 
+  @SuppressWarnings("unchecked")
   public static <T extends ParseObject, V> Function<T, V> getter(final String key) {
     switch (key) {
       case OBJECT_ID:
@@ -91,6 +99,7 @@ public abstract class DataClass<T extends DataClass<T>> extends ParseObject impl
     }
   }
 
+  @SuppressWarnings("unchecked")
   public static <T extends ParseObject> Equivalence<T> equivalentOn(String key) {
     return (Equivalence<T>) Equivalence.equals().onResultOf(getter(key));
   }

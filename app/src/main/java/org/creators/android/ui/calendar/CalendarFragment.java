@@ -1,6 +1,7 @@
 package org.creators.android.ui.calendar;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -29,7 +30,7 @@ import org.creators.android.ui.common.Util;
 /**
  * Created by Damian Wieczorek <damianw@umich.edu> on 7/27/14.
  */
-public class CalendarFragment extends Fragment implements ParseAdapter.ListCallbacks<Event>, AdapterView.OnItemSelectedListener {
+public class CalendarFragment extends Fragment implements ParseAdapter.ListCallbacks<Event>, AdapterView.OnItemSelectedListener, AdapterView.OnItemClickListener {
   public static final String TAG = "CalendarFragment";
 
   private ListView mListView;
@@ -71,6 +72,7 @@ public class CalendarFragment extends Fragment implements ParseAdapter.ListCallb
 
     mListView = (ListView) mLayout.findViewById(R.id.events_list);
     mListView.setAdapter(mAdapter);
+    mListView.setOnItemClickListener(this);
 
     mAdapter.bindSync(mLayout);
     if (getArguments().getBoolean(MainActivity.SHOULD_SYNC, false)) mAdapter.onRefresh();
@@ -89,8 +91,8 @@ public class CalendarFragment extends Fragment implements ParseAdapter.ListCallb
 
     title.setText(event.getTitle());
     details.setText(event.getDetails());
-    date.setText(Util.Format.formatDate(event.getStartDate()));
-    time.setText(Util.Format.roundTimeAndFormat(event.getStartDate(), 2) + '-' + Util.Format.roundTimeAndFormat(event.getEndDate(), 2));
+    date.setText(Util.Time.formatDate(event.getStartDate()));
+    time.setText(Util.Time.roundTimeAndFormat(event.getStartDate(), 2) + '-' + Util.Time.roundTimeAndFormat(event.getEndDate(), 2));
 
     if (rsvp.getAdapter() == null) {
       rsvp.setAdapter(new ArrayAdapter<>(getActivity(), R.layout.adapter_rsvp_spinner_item, mRsvpOptions));
@@ -108,7 +110,20 @@ public class CalendarFragment extends Fragment implements ParseAdapter.ListCallb
   }
 
   @Override
+  public void onStart() {
+    super.onStart();
+    mAdapter.notifyDataSetChanged();
+  }
+
+  @Override
   public void onNothingSelected(AdapterView<?> adapterView) {
     ((EventResponse) adapterView.getTag()).setStatus(EventResponse.Status.NO_RESPONSE);
+  }
+
+  @Override
+  public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+    Intent intent = new Intent(getActivity(), EventDetailActivity.class);
+    intent.putExtra(Event.OBJECT_ID, mAdapter.getItem(i).getObjectId());
+    startActivity(intent);
   }
 }

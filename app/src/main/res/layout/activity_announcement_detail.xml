@@ -1,0 +1,56 @@
+<!-- A DrawerLayout is intended to be used as the top-level content view using match_parent for both width and height to consume the full space available. -->
+<ScrollView
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical"
+      android:padding="@dimen/activity_vertical_margin">
+
+      <TextView
+        android:id="@+id/announcement_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_marginTop="@dimen/intra_list_item_padding"
+
+        android:ellipsize="marquee"
+        android:singleLine="true"
+        android:text="@string/lorem_announcement_title"
+        android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+      <TextView
+        android:id="@+id/announcement_details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_marginTop="@dimen/intra_list_item_padding"
+
+        android:singleLine="false"
+        android:text="@string/lorem_ipsum_standard"
+        android:textAppearance="?android:textAppearanceMedium"/>
+
+      </LinearLayout>
+
+    <ImageView
+      android:id="@+id/announcement_image"
+      android:layout_width="match_parent"
+      android:layout_height="240dp"
+
+      android:layout_marginTop="@dimen/activity_vertical_margin"
+
+      android:scaleType="centerCrop"
+      android:src="@drawable/ic_launcher"
+      android:contentDescription="@string/event_image"/>
+
+  </LinearLayout>
+
+</ScrollView>

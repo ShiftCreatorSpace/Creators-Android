@@ -1,11 +1,13 @@
 package org.creators.android.ui.members;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -23,7 +25,7 @@ import org.creators.android.ui.common.ParseAdapter;
 /**
  * Created by Damian Wieczorek <damianw@umich.edu> on 7/27/14.
  */
-public class MembersFragment extends Fragment implements ParseAdapter.ListCallbacks<User> {
+public class MembersFragment extends Fragment implements ParseAdapter.ListCallbacks<User>, AdapterView.OnItemClickListener {
   public static final String TAG = "MembersFragment";
 
   private ListView mListView;
@@ -53,6 +55,7 @@ public class MembersFragment extends Fragment implements ParseAdapter.ListCallba
 
     mListView = (ListView) mLayout.findViewById(R.id.events_list);
     mListView.setAdapter(mAdapter);
+    mListView.setOnItemClickListener(this);
 
     mAdapter.bindSync(mLayout);
     if (getArguments().getBoolean(MainActivity.SHOULD_SYNC, false)) mAdapter.onRefresh();
@@ -73,4 +76,10 @@ public class MembersFragment extends Fragment implements ParseAdapter.ListCallba
       .into(selfie);
   }
 
+  @Override
+  public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+    Intent intent = new Intent(getActivity(), MemberDetailActivity.class);
+    intent.putExtra(User.OBJECT_ID, mAdapter.getItem(i).getObjectId());
+    startActivity(intent);
+  }
 }

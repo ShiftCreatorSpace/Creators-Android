@@ -1,11 +1,13 @@
 package org.creators.android.ui.announcements;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -21,7 +23,7 @@ import org.creators.android.ui.common.ParseAdapter;
 /**
  * Created by Damian Wieczorek <damianw@umich.edu> on 7/27/14.
  */
-public class AnnouncementsFragment extends Fragment implements ParseAdapter.ListCallbacks<Announcement> {
+public class AnnouncementsFragment extends Fragment implements ParseAdapter.ListCallbacks<Announcement>, AdapterView.OnItemClickListener {
   public static final String TAG = "AnnouncementsFragment";
 
   private ListView mListView;
@@ -39,7 +41,7 @@ public class AnnouncementsFragment extends Fragment implements ParseAdapter.List
     ParseQueryAdapter.QueryFactory<Announcement> factory = new ParseQueryAdapter.QueryFactory<Announcement>() {
       @Override
       public ParseQuery<Announcement> create() {
-        return Announcement.query().orderByDescending(Announcement.CREATED_AT);
+        return Announcement.query().orderByDescending(Announcement.PINNED).orderByDescending(Announcement.CREATED_AT);
       }
     };
     mAdapter = new ParseAdapter<>(getActivity(), R.layout.adapter_announcement, this, factory);
@@ -51,6 +53,7 @@ public class AnnouncementsFragment extends Fragment implements ParseAdapter.List
 
     mListView = (ListView) mLayout.findViewById(R.id.announcements_list);
     mListView.setAdapter(mAdapter);
+    mListView.setOnItemClickListener(this);
 
     mAdapter.bindSync(mLayout);
     if (getArguments().getBoolean(MainActivity.SHOULD_SYNC, false)) mAdapter.onRefresh();
@@ -76,4 +79,10 @@ public class AnnouncementsFragment extends Fragment implements ParseAdapter.List
     pinned.setVisibility(announcement.isPinned() ? View.VISIBLE : View.GONE);
   }
 
+  @Override
+  public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+    Intent intent = new Intent(getActivity(), AnnouncementDetailActivity.class);
+    intent.putExtra(Announcement.OBJECT_ID, mAdapter.getItem(i).getObjectId());
+    startActivity(intent);
+  }
 }

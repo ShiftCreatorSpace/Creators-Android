@@ -25,6 +25,40 @@
       android:name=".ui.LoginActivity"
       android:label="@string/title_activity_login">
     </activity>
+
+    <activity
+      android:name=".ui.announcements.AnnouncementDetailActivity"
+      android:label="@string/announcement_detail"
+      android:parentActivityName=".ui.MainActivity">
+
+      <meta-data
+        android:name="android.support.PARENT_ACTIVITY"
+        android:value=".ui.MainActivity"/>
+
+    </activity>
+
+    <activity
+      android:name=".ui.calendar.EventDetailActivity"
+      android:label="@string/event_detail"
+      android:parentActivityName=".ui.MainActivity">
+
+      <meta-data
+        android:name="android.support.PARENT_ACTIVITY"
+        android:value=".ui.MainActivity"/>
+
+    </activity>
+
+    <activity
+      android:name=".ui.members.MemberDetailActivity"
+      android:label="@string/member_detail"
+      android:parentActivityName=".ui.MainActivity">
+
+      <meta-data
+        android:name="android.support.PARENT_ACTIVITY"
+        android:value=".ui.MainActivity"/>
+
+    </activity>
+
   </application>
 
 </manifest>

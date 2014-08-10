@@ -1,0 +1,61 @@
+<!-- A DrawerLayout is intended to be used as the top-level content view using match_parent for both width and height to consume the full space available. -->
+<ScrollView
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:isScrollContainer="true"
+    android:padding="@dimen/activity_vertical_margin">
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="160dp"
+      android:orientation="horizontal"
+      android:weightSum="100">
+
+      <ImageView
+        android:id="@+id/member_selfie"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="50"
+
+        android:src="@drawable/ic_launcher"
+        android:contentDescription="@string/user_selfie"/>
+
+      <TextView
+        android:id="@+id/member_name"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="50"
+
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="40sp"
+        android:gravity="center"
+        android:text="@string/lorem_user_full_name"/>
+
+      </LinearLayout>
+
+    <TextView
+      android:id="@+id/member_major"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="@dimen/activity_vertical_margin"
+
+      android:textAppearance="?android:attr/textAppearanceMedium"
+      android:text="@string/lorem_user_major"/>
+
+    <TextView
+      android:id="@+id/member_bio"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="@dimen/activity_vertical_margin"
+
+      android:text="@string/lorem_ipsum_standard"/>
+
+  </LinearLayout>
+
+</ScrollView>

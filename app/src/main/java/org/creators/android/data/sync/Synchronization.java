@@ -4,6 +4,9 @@ import android.os.AsyncTask;
 import android.support.v4.widget.SwipeRefreshLayout;
 
 import com.google.common.base.Optional;
+import com.parse.ParseQuery;
+import com.parse.ParseQueryAdapter;
+import com.parse.ParseRole;
 
 import org.creators.android.data.model.Announcement;
 import org.creators.android.data.model.Config;
@@ -53,6 +56,13 @@ public class Synchronization extends AsyncTask<Void, Void, Void> {
       Project.getSync().sync();
       Request.getSync().sync();
       User.getSync().sync();
+
+      new Synchronize<>(new ParseQueryAdapter.QueryFactory<ParseRole>() {
+        @Override
+        public ParseQuery<ParseRole> create() {
+          return ParseRole.getQuery();
+          }
+      }).sync();
     } catch (Synchronize.SyncException e) {
       return error(e);
     }

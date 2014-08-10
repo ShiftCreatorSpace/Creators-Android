@@ -4,6 +4,7 @@ import android.os.Parcel;
 
 import com.parse.ParseClassName;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseQueryAdapter;
 
@@ -21,6 +22,7 @@ public class Announcement extends DataClass<Announcement> {
   public static final String DETAILS = "details";
   public static final String POSTER = "poster";
   public static final String PINNED = "pinned";
+  public static final String IMAGE = "photo"; // come. on.
 
   public Announcement() {
     super(false);
@@ -64,6 +66,18 @@ public class Announcement extends DataClass<Announcement> {
 
   public Announcement setPoster(User poster) {
     return builderPut(POSTER, poster);
+  }
+
+  public boolean hasImage() {
+    return has(IMAGE);
+  }
+
+  public ParseFile getImageFile() {
+    return hasImage() ? getParseFile(IMAGE) : null;
+  }
+
+  public Announcement setImageFile(ParseFile imageFile) {
+    return builderPut(IMAGE, imageFile);
   }
 
   public static final Creator<Announcement> CREATOR = new Creator<Announcement>() {

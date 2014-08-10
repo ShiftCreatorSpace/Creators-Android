@@ -23,6 +23,12 @@
   <string name="divider_pipe">|</string>
   <string name="events">Events</string>
   <string name="members">Members</string>
+  <string name="lorem_user_major">Biochemical Engineering</string>
+  <string name="user_selfie">The Member\'s Selfie</string>
+  <string name="member_detail">Profile</string>
+  <string name="event_image">Event Image</string>
+  <string name="event_detail">Event Details</string>
+  <string name="announcement_detail">Announcement Details</string>
 
   <string-array name="rsvp_options">
     <item>No Response</item>

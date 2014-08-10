@@ -4,6 +4,7 @@ import android.os.Parcel;
 
 import com.parse.ParseClassName;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
 import com.parse.ParseQueryAdapter;
@@ -26,6 +27,7 @@ public class Event extends DataClass<Event> {
   public static final String END_DATE = "endDate";
   public static final String LOCATION = "location";
   public static final String LOCATION_NAME = "locationName";
+  public static final String IMAGE = "photo"; // waaaahhhh
 
   public Event() {
     super(false);
@@ -85,6 +87,14 @@ public class Event extends DataClass<Event> {
 
   public Event setLocationName(String locationName) {
     return builderPut(LOCATION_NAME, locationName);
+  }
+
+  public ParseFile getImageFile() {
+    return getParseFile(IMAGE);
+  }
+
+  public Event setImageFile(ParseFile imageFile) {
+    return builderPut(IMAGE, imageFile);
   }
 
 
