@@ -45,6 +45,7 @@ android {
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
       resValue "string", "parse_application_id", parse_application_id
       resValue "string", "parse_client_key", parse_client_key
+      signingConfig signingConfigs.release
     }
     debug {
       debuggable true
