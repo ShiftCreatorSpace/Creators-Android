@@ -8,6 +8,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.parse.ParseAnalytics;
+
 import org.creators.android.R;
 import org.creators.android.data.model.User;
 import org.creators.android.ui.nav.NavItem;
@@ -34,13 +36,10 @@ public class MainActivity extends Activity
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
 
-//    getActionBar().setTitle(mUser.getFullName());
-
     mNavigationDrawerFragment = (NavigationDrawerFragment)
       getFragmentManager().findFragmentById(R.id.navigation_drawer);
     mTitle = getTitle();
 
-    // Set up the drawer.
     mNavigationDrawerFragment.setUp(
       R.id.navigation_drawer,
       (DrawerLayout) findViewById(R.id.drawer_layout));
@@ -49,7 +48,10 @@ public class MainActivity extends Activity
     if (mUser == null) {
       startActivity(new Intent(this, LoginActivity.class));
       finish();
+      return;
     }
+
+    ParseAnalytics.trackAppOpened(getIntent());
   }
 
   @Override

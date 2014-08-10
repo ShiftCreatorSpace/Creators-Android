@@ -34,7 +34,7 @@ android {
     minSdkVersion 14
     targetSdkVersion 20
     versionCode ((int)(System.currentTimeMillis()/1000))
-    versionName "0.0.1"
+    versionName "0.0.2"
     resValue "string", "parse_application_id", parse_application_id
     resValue "string", "parse_client_key", parse_client_key
   }

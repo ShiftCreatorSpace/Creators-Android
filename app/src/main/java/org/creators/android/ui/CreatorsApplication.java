@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.parse.Parse;
 import com.parse.ParseObject;
+import com.parse.PushService;
 
 import org.creators.android.R;
 import org.creators.android.data.model.Announcement;
@@ -33,5 +34,7 @@ public class CreatorsApplication extends Application {
 
     Parse.enableLocalDatastore(this);
     Parse.initialize(this, getString(R.string.parse_application_id), getString(R.string.parse_client_key));
+
+    PushService.setDefaultPushCallback(this, MainActivity.class);
   }
 }
