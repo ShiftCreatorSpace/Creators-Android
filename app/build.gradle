@@ -14,6 +14,21 @@ android {
     targetCompatibility JavaVersion.VERSION_1_7
   }
 
+  signingConfigs {
+    release {
+      storeFile file("creators-release-key.keystore")
+      keyAlias "mykey"
+
+      def console = System.console()
+
+      if (console != null) {
+        def password = new String(console.readPassword("\n> Enter keystore password: "))
+        storePassword password
+        keyPassword password
+      }
+    }
+  }
+
   defaultConfig {
     applicationId "org.creators.android"
     minSdkVersion 14
