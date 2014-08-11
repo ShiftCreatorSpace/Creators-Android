@@ -114,11 +114,19 @@ public class ParseAdapter<T extends ParseObject> extends BaseAdapter implements
 
   private class ArrayFilter extends Filter {
     private Optional<Function<T, String>> mmGetter = Optional.absent();
+    private Optional<Predicate<T>> mmPredicate = Optional.absent();
 
     public ArrayFilter() {}
 
     public ArrayFilter withGetter(Function<T, String> getter) {
       mmGetter = Optional.fromNullable(getter);
+      mmPredicate = Optional.absent();
+      return this;
+    }
+
+    public ArrayFilter withPredicate(Predicate<T> predicate) {
+      mmGetter = Optional.absent();
+      mmPredicate = Optional.fromNullable(predicate);
       return this;
     }
 
@@ -131,6 +139,8 @@ public class ParseAdapter<T extends ParseObject> extends BaseAdapter implements
         list = new ArrayList<>(mOriginalItems);
         results.values = list;
         results.count =  list.size();
+      } else if (mmPredicate.isPresent()) {
+        list = Lists.newArrayList(Iterables.filter(mOriginalItems, mmPredicate.get()));
       } else {
         list = Lists.newArrayList(Iterables.filter(mOriginalItems, new Predicate<T>() {
           @Override
@@ -160,6 +170,10 @@ public class ParseAdapter<T extends ParseObject> extends BaseAdapter implements
     unloadFilter();
     mFilterHandler = Optional.of(new FilterHandler(getter, menu, searchId));
     return mFilterHandler.get();
+  }
+
+  public ArrayFilter getFilter() {
+    return mFilter;
   }
 
   public void unloadFilter() {
