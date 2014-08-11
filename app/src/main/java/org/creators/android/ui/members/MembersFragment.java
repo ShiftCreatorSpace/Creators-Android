@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -12,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.common.base.Function;
 import com.parse.ParseQuery;
 import com.parse.ParseQueryAdapter;
 import com.squareup.picasso.Picasso;
@@ -39,6 +42,7 @@ public class MembersFragment extends Fragment implements ParseAdapter.ListCallba
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    setHasOptionsMenu(true);
 
     ParseQueryAdapter.QueryFactory<User> factory = new ParseQueryAdapter.QueryFactory<User>() {
       @Override
@@ -46,7 +50,7 @@ public class MembersFragment extends Fragment implements ParseAdapter.ListCallba
         return User.query().orderByAscending(User.FIRST_NAME);
       }
     };
-    mAdapter = new ParseAdapter<User>(getActivity(), R.layout.adapter_user, this, factory);
+    mAdapter = new ParseAdapter<>(getActivity(), R.layout.adapter_user, this, factory);
   }
 
   @Override
@@ -61,6 +65,19 @@ public class MembersFragment extends Fragment implements ParseAdapter.ListCallba
     if (getArguments().getBoolean(MainActivity.SHOULD_SYNC, false)) mAdapter.onRefresh();
 
     return mLayout;
+  }
+
+  @Override
+  public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    super.onCreateOptionsMenu(menu, inflater);
+    inflater.inflate(R.menu.fragment_members, menu);
+
+    mAdapter.prepareFilter(menu, R.id.menu_search, new Function<User, String>() {
+      @Override
+      public String apply(User input) {
+        return input.getFullName().toLowerCase();
+      }
+    });
   }
 
   @Override
