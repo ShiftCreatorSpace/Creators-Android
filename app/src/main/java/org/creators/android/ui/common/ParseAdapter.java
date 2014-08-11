@@ -114,9 +114,9 @@ public class ParseAdapter<T extends ParseObject> extends BaseAdapter implements
 
   public class ArrayFilter extends Filter {
     private Optional<Function<T, String>> mmGetter = Optional.absent();
-    private Optional<Predicate<T>> mmPredicate = Optional.absent();
+    private Optional<Predicate<String>> mmPredicate = Optional.absent();
 
-    private ArrayFilter() {}
+    public ArrayFilter() {}
 
     public ArrayFilter withGetter(Function<T, String> getter) {
       mmGetter = Optional.fromNullable(getter);
@@ -124,10 +124,19 @@ public class ParseAdapter<T extends ParseObject> extends BaseAdapter implements
       return this;
     }
 
-    public ArrayFilter withPredicate(Predicate<T> predicate) {
+    public ArrayFilter withPredicate(Predicate<String> predicate) {
       mmGetter = Optional.absent();
       mmPredicate = Optional.fromNullable(predicate);
       return this;
+    }
+
+    protected FilterResults performFiltering(final Predicate<T> predicate) {
+      if (predicate == null) return performFiltering((CharSequence) null);
+      ArrayList<T> list = Lists.newArrayList(Iterables.filter(mOriginalItems, predicate));
+      FilterResults results = new FilterResults();
+      results.values = list;
+      results.count = list.size();
+      return results;
     }
 
     @Override
@@ -139,16 +148,15 @@ public class ParseAdapter<T extends ParseObject> extends BaseAdapter implements
         list = new ArrayList<>(mOriginalItems);
         results.values = list;
         results.count =  list.size();
-      } else if (mmPredicate.isPresent()) {
-        list = Lists.newArrayList(Iterables.filter(mOriginalItems, mmPredicate.get()));
       } else {
-        list = Lists.newArrayList(Iterables.filter(mOriginalItems, new Predicate<T>() {
+        Predicate<T> predicate = new Predicate<T>() {
           @Override
           public boolean apply(T input) {
             String value = mmGetter.isPresent() ? mmGetter.get().apply(input) : input.toString();
-            return value != null && value.contains(prefix);
+            return value != null && ((mmPredicate.isPresent() && mmPredicate.get().apply(value)) || (value.contains(prefix)));
           }
-        }));
+        };
+        list = Lists.newArrayList(Iterables.filter(mOriginalItems, predicate));
       }
       results.values = list;
       results.count = list.size();
