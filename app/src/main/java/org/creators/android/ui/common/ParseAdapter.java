@@ -112,11 +112,11 @@ public class ParseAdapter<T extends ParseObject> extends BaseAdapter implements
     return view;
   }
 
-  private class ArrayFilter extends Filter {
+  public class ArrayFilter extends Filter {
     private Optional<Function<T, String>> mmGetter = Optional.absent();
     private Optional<Predicate<T>> mmPredicate = Optional.absent();
 
-    public ArrayFilter() {}
+    private ArrayFilter() {}
 
     public ArrayFilter withGetter(Function<T, String> getter) {
       mmGetter = Optional.fromNullable(getter);
